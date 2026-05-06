@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Google AI Studio App</title>
+    <script>
+      (function() {
+        var _fetch = window.fetch;
+        function patch(obj) {
+          if (!obj) return;
+          try {
+            var descriptor = Object.getOwnPropertyDescriptor(obj, 'fetch');
+            if (descriptor && !descriptor.configurable) return;
+            Object.defineProperty(obj, 'fetch', {
+              get: function() { return _fetch; },
+              set: function(v) { _fetch = v; },
+              configurable: true,
+              enumerable: true
+            });
+          } catch (e) {}
+        }
+        patch(window);
+        patch(Window.prototype);
+        if (typeof globalThis !== 'undefined') patch(globalThis);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
